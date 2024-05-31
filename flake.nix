@@ -18,7 +18,6 @@
             kubectl
             kubernetes-helm
             nodejs_22
-            nodePackages.cdk8s-cli
             poetry
             postgresql
             python312
