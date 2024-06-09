@@ -1,3 +1,4 @@
 *.js
 imports/
 !eslint.config.js
+!jest.config.js
