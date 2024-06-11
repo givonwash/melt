@@ -1,0 +1,12 @@
+language: typescript
+app: npx tsx src/synth.ts
+imports:
+  - k8s
+  - clusterWorkflowTemplates:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_clusterworkflowtemplates.yaml
+  - cronWorkflows:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_cronworkflows.yaml
+  - workflowArtifactGcTasks:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_workflowartifactgctasks.yaml
+  - workflowEventBindings:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_workfloweventbindings.yaml
+  - workflows:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_workflows.yaml
+  - workflowTaskResults:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_workflowtaskresults.yaml
+  - workflowTaskSets:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_workflowtasksets.yaml
+  - workflowTemplates:=https://raw.githubusercontent.com/argoproj/argo-workflows/v3.5.6/manifests/base/crds/full/argoproj.io_workflowtemplates.yaml

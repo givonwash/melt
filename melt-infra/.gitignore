@@ -1,0 +1,12 @@
+# {j,t}s-related
+*.d.ts
+*.js
+node_modules
+!eslint.config.js
+!jest.config.js
+
+# ignore generated manifests
+dist/
+
+# ignore generated constructs
+imports/
