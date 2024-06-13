@@ -1,0 +1,93 @@
+version: 2
+models:
+  - name: users
+    description: |
+      Users "mart" encapsulating all data relevant to a given user
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: user_id
+        data_type: int8
+        constraints:
+          - type: primary_key
+      - name: count_cart_additions
+        data_type: int8
+      - name: count_completed_purchases
+        data_type: int8
+      - name: count_returns
+        data_type: int8
+      - name: created_at
+        data_type: timestamp
+      - name: created_at_with_tz
+        data_type: timestamptz
+      - name: first_added_to_cart_at
+        data_type: timestamp
+      - name: first_purchased_at
+        data_type: timestamp
+      - name: first_returned_at
+        data_type: timestamp
+      - name: last_added_to_cart_at
+        data_type: timestamp
+      - name: last_purchased_at
+        data_type: timestamp
+      - name: last_returned_at
+        data_type: timestamp
+      - name: longest_carted_to_purchased_seconds
+        data_type: numeric
+      - name: longest_purchased_to_returned_seconds
+        data_type: numeric
+      - name: most_carted_product
+        data_type: int8
+      - name: most_purchased_product
+        data_type: int8
+      - name: most_returned_product
+        data_type: int8
+      - name: shortest_carted_to_purchase_seconds
+        data_type: numeric
+      - name: shortest_purchased_to_returned_seconds
+        data_type: numeric
+      - name: user_academic_degree
+        data_type: varchar
+      - name: user_age
+        data_type: int8
+      - name: user_blood_type
+        data_type: t_blood_type
+      - name: user_city
+        data_type: varchar
+      - name: user_country_code
+        data_type: varchar
+      - name: user_email_address
+        data_type: varchar
+      - name: user_gender
+        data_type: varchar
+      - name: user_height
+        data_type: float
+      - name: user_language
+        data_type: varchar
+      - name: user_name
+        data_type: varchar
+      - name: user_nationality
+        data_type: varchar
+      - name: user_occupation
+        data_type: varchar
+      - name: user_phone_number
+        data_type: varchar
+      - name: user_postal_code
+        data_type: int
+      - name: user_province
+        data_type: varchar
+      - name: user_state
+        data_type: varchar
+      - name: user_street_name
+        data_type: varchar
+      - name: user_street_number
+        data_type: int8
+      - name: user_title
+        data_type: varchar
+      - name: updated_at
+        data_type: timestamp
+      - name: updated_at_with_tz
+        data_type: timestamptz
+      - name: user_weight
+        data_type: int8

@@ -1,0 +1,28 @@
+version: 2
+models:
+  - name: stg_faker__users
+    description: |
+      Faker's `users` table transformed according to the rules for DBT staging transformations [1]
+
+      [1]: https://docs.getdbt.com/best-practices/how-we-structure/2-staging
+  - name: stg_faker__products
+    description: |
+      Faker's `products` table transformed according to the rules for DBT staging transformations [1]
+
+      [1]: https://docs.getdbt.com/best-practices/how-we-structure/2-staging
+  - name: stg_faker__purchases
+    description: |
+      Faker's `purchases` table transformed according to the rules for DBT staging transformations [1]
+
+      [1]: https://docs.getdbt.com/best-practices/how-we-structure/2-staging
+  - name: int_faker__purchases_joined_with_products
+    description: |
+      Staging `purchases` table joined with staging `products` table on `product_id`
+  - name: int_faker__purchases_joined_with_products_grouped_by_product_id
+    description: |
+      Staging `purchases` table joined with staging `products` table on `product_id` and grouped by
+      `product_id` to calculate relevant aggregate "metrics"
+  - name: int_faker__purchases_joined_with_products_grouped_by_user_id
+    description: |
+      Staging `purchases` table joined with staging `products` table on `product_id` and grouped by
+      `user_id` to calculate relevant aggregate "metrics"

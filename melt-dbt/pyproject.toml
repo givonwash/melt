@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "melt-dbt"
+version = "0.1.0"
+description = "DBT transformations for melt"
+authors = ["givonwash <givonwash@gmail.com>"]
+license = "GPL-3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+dbt-core = "^1.8.2"
+dbt-postgres = "^1.8.1"
+
+[tool.poetry.group.dev.dependencies]
+shandy-sqlfmt = {extras = ["jinjafmt"], version = "^0.21.3"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

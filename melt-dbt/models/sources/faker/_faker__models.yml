@@ -1,0 +1,9 @@
+version: 2
+sources:
+  - name: faker
+    database: '{{ env_var("DBT_DBNAME") }}'
+    schema: '{{ env_var("DBT_FAKER_SOURCE_SCHEMA", "faker") }}'
+    tables:
+      - name: products
+      - name: purchases
+      - name: users

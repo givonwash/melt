@@ -1,0 +1,33 @@
+version: 2
+macros:
+  - name: create_enum
+    description: |
+      Create Postgres `Enum` types [1]. Members are defined by argument to `variants`.
+
+      Note that if a type named `enum` already exists with the same `variants`, this macro
+      will suppress any `duplicate_object` error.
+
+      [1]: https://www.postgresql.org/docs/16/datatype-enum.html
+    arguments:
+      - name: name
+        type: str
+      - name: variants
+        type: list[str]
+        description: |
+          Variant labels for `Enum` identified by `name`
+
+          Note that each element in `variants` will be wrapped in single quotes automatically
+  - name: create_types
+    description: |
+      Create all types necessary for `melt_dbt` to run successfully.
+  - name: generate_schema_name
+    description: |
+      Generate schema names for DBT [1] according to the value of `target.name` and
+      `custom_schema_name`
+
+      [1]: https://docs.getdbt.com/docs/build/custom-schemas
+    arguments:
+      - name: custom_schema_name
+        type: str
+      - name: node
+        type: Node
