@@ -1,0 +1,118 @@
+version: 2
+models:
+  - name: products
+    description: |
+      Products "mart" encapsulating all data relevant to a given product
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: product_id
+        data_type: int8
+        constraints:
+          - type: primary_key
+      - name: count_cart_additions
+        data_type: int8
+      - name: count_completed_purchases
+        data_type: int8
+      - name: count_returns
+        data_type: int8
+      - name: created_at
+        data_type: timestamp
+      - name: created_at_with_tz
+        data_type: timestamptz
+      - name: first_added_to_cart_at
+        data_type: timestamp
+      - name: first_purchased_at
+        data_type: timestamp
+      - name: first_returned_at
+        data_type: timestamp
+      - name: last_added_to_cart_at
+        data_type: timestamp
+      - name: last_purchased_at
+        data_type: timestamp
+      - name: last_returned_at
+        data_type: timestamp
+      - name: longest_carted_to_purchased_seconds
+        data_type: numeric
+      - name: longest_purchased_to_returned_seconds
+        data_type: numeric
+      - name: product_make
+        data_type: varchar
+      - name: product_model
+        data_type: varchar
+      - name: product_price
+        data_type: numeric(38,9)
+      - name: shortest_carted_to_purchase_seconds
+        data_type: numeric
+      - name: shortest_purchased_to_returned_seconds
+        data_type: numeric
+      - name: updated_at
+        data_type: timestamp
+      - name: updated_at_with_tz
+        data_type: timestamptz
+      - name: product_year
+        data_type: int8
+  - name: purchases
+    description: |
+      Purchases "mart" encapsulating all data relevant to a given purchase
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: purchase_id
+        data_type: int8
+        constraints:
+          - type: primary_key
+      - name: product_id
+        data_type: int8
+        constraints:
+          - type: foreign_key
+            expression: "{{ target.name ~ '_shop' if target.name == 'development' else 'shop' }}.products (product_id)"
+      - name: user_id
+        data_type: int8
+        constraints:
+          - type: foreign_key
+            expression: "{{ target.name ~ '_core' if target.name == 'development' else 'core' }}.users (user_id)"
+      - name: added_to_cart_at
+        data_type: timestamp
+      - name: added_to_cart_at_with_tz
+        data_type: timestamptz
+      - name: carted_to_purchased_seconds
+        data_type: numeric
+      - name: product_created_at
+        data_type: timestamp
+      - name: product_created_at_with_tz
+        data_type: timestamptz
+      - name: product_make
+        data_type: varchar
+      - name: product_model
+        data_type: varchar
+      - name: product_price
+        data_type: numeric(38, 9)
+      - name: product_updated_at
+        data_type: timestamp
+      - name: product_updated_at_with_tz
+        data_type: timestamptz
+      - name: product_year
+        data_type: int8
+      - name: purchase_created_at
+        data_type: timestamp
+      - name: purchase_created_at_with_tz
+        data_type: timestamptz
+      - name: purchase_state
+        data_type: t_purchase_state
+      - name: purchase_updated_at
+        data_type: timestamp
+      - name: purchase_updated_at_with_tz
+        data_type: timestamptz
+      - name: purchased_at
+        data_type: timestamp
+      - name: purchased_at_with_tz
+        data_type: timestamptz
+      - name: purchased_to_returned_seconds
+        data_type: numeric
+      - name: returned_at
+        data_type: timestamp
+      - name: returned_at_with_tz
+        data_type: timestamptz

@@ -1,0 +1,21 @@
+name: melt_dbt
+config-version: 2
+version: 0.0.1
+profile: melt
+macro-paths: [macros]
+model-paths: [models]
+clean-targets:
+  - dbt_packages
+  - target
+models:
+  melt_dbt:
+    +materialized: view
+    +schema: staging
+    marts:
+      +materialized: table
+      core:
+        +schema: core
+      shop:
+        +schema: shop
+on-run-start:
+  - "{{ create_types() }}"

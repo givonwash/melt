@@ -1,0 +1,21 @@
+melt:
+  target: "{{ env_var('DBT_TARGET', 'development') }}"
+  outputs:
+    development:
+      type: postgres
+      threads: "{{ env_var('DBT_THREAD_COUNT', 1) | as_number }}"
+      schema: development
+      dbname: "{{ env_var('DBT_DBNAME') }}"
+      host: "{{ env_var('DBT_HOST') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      port: "{{ env_var('DBT_PORT', 5432) | as_number }}"
+      user: "{{ env_var('DBT_USER') }}"
+    production:
+      type: postgres
+      threads: "{{ env_var('DBT_THREAD_COUNT', 2) | as_number }}"
+      schema: production
+      dbname: "{{ env_var('DBT_DBNAME') }}"
+      host: "{{ env_var('DBT_HOST') }}"
+      password: "{{ env_var('DBT_PASSWORD') }}"
+      port: "{{ env_var('DBT_PORT', 5432) | as_number }}"
+      user: "{{ env_var('DBT_USER') }}"
