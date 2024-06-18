@@ -99,6 +99,22 @@
             cp -r ${./melt-dbt}/* $out/app
             cp -r ${meltDbtUtils} $out/app/dbt_packages/dbt_utils
           '';
+          melt-dbt-docker-image =
+            pkgs.dockerTools.buildImage {
+              name = "melt-dbt";
+              copyToRoot = pkgs.buildEnv {
+                name = "image-root";
+                paths = [ self.packages.${system}.melt-dbt-project ];
+                pathsToLink = [ "/app" ];
+              };
+              config = {
+                Entrypoint = [ "${meltDbtEnv}/bin/dbt" ];
+                Env = [
+                  "DBT_PROFILES_DIR=/app"
+                  "DBT_PROJECT_DIR=/app"
+                ];
+              };
+            };
         };
       });
 }
