@@ -30,4 +30,4 @@ jobs:
           IMAGE_REPOSITORY: givonwash/melt-dbt
         run: |
           docker tag melt-dbt:${BUILD_HASH} ${IMAGE_REPOSITORY}:${BUILD_HASH}
-          docker push ${IMAGE_REPOSITORY}:${IMAGE_TAG}
+          docker push ${IMAGE_REPOSITORY}:${BUILD_HASH}
