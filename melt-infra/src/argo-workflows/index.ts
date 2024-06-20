@@ -19,6 +19,7 @@ import {
   MeltCheckHttpGetJsonOrHttpPostJson,
   MeltCheckHttpGetJsonOrHttpPostJsonWithPatchedSecrets,
 } from "./templates/check-http-get-json-or-http-post-json.js";
+import { MeltDbtBuildMarts } from "./templates/melt-dbt-build-marts.js";
 
 interface MeltArgoChartProps extends MeltChartProps {
   airbyteChart: MeltAirbyteChart;
@@ -116,6 +117,11 @@ export class MeltArgoWorkflows extends MeltChart {
         },
       );
 
+    const buildMeltDbtMarts = new MeltDbtBuildMarts(this, "build-melt-dbt-marts", {
+      namespace,
+      serviceAccountName: workflowExecutorServiceAccount.name,
+    });
+
     const eltWorkflow = new CronWorkflow(this, "elt-workflow", {
       metadata: { namespace },
       spec: {
@@ -151,6 +157,9 @@ export class MeltArgoWorkflows extends MeltChart {
                   { name: "postgresPasswordSecretKey", value: postgres.postgresMeltPasswordKey },
                   { name: "postgresPort", value: postgresChart.port.toString() },
                   { name: "postgresUsername", value: postgresChart.meltUser },
+
+                  { name: "meltDbtImageTag", value: "642hvdbspx252ifc1g8vh4bmql91xhm4" },
+                  { name: "meltDbtThreadCount", value: "2" },
                 ],
               },
               dag: {
@@ -517,6 +526,58 @@ export class MeltArgoWorkflows extends MeltChart {
                         {
                           name: "retryLimit",
                           value: "{{inputs.parameters.airbyteFakerToPostgresJobRetryLimit}}",
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    name: "dbt-transform",
+                    templateRef: {
+                      name: ApiObject.of(buildMeltDbtMarts).name,
+                      template: MeltDbtBuildMarts.templateName,
+                    },
+                    dependencies: ["wait-for-load"],
+                    arguments: {
+                      parameters: [
+                        {
+                          name: "meltDbtImageTag",
+                          value: "{{inputs.parameters.meltDbtImageTag}}",
+                        },
+                        {
+                          name: "database",
+                          value: "{{inputs.parameters.postgresDatabase}}",
+                        },
+                        {
+                          name: "hostname",
+                          value: "{{inputs.parameters.postgresHostname}}",
+                        },
+                        {
+                          name: "port",
+                          value: "{{inputs.parameters.postgresPort}}",
+                        },
+                        {
+                          name: "username",
+                          value: "{{inputs.parameters.postgresUsername}}",
+                        },
+                        {
+                          name: "passwordSecret",
+                          value: "{{inputs.parameters.postgresPasswordSecret}}",
+                        },
+                        {
+                          name: "passwordSecretKey",
+                          value: "{{inputs.parameters.postgresPasswordSecretKey}}",
+                        },
+                        {
+                          name: "profileTarget",
+                          value: "production",
+                        },
+                        {
+                          name: "threadCount",
+                          value: "{{inputs.parameters.meltDbtThreadCount}}",
+                        },
+                        {
+                          name: "fakerSourceSchema",
+                          value: "{{inputs.parameters.airbyteFakerToPostgresDestinationSchema}}",
                         },
                       ],
                     },
