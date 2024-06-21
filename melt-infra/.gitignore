@@ -7,6 +7,3 @@ node_modules
 
 # ignore generated manifests
 dist/
-
-# ignore generated constructs
-imports/
