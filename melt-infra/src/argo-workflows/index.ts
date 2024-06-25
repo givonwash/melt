@@ -1,6 +1,7 @@
 import { ApiObject, Helm } from "cdk8s";
 import { ApiResource, Role, ServiceAccount } from "cdk8s-plus-29";
 import { Construct } from "constructs";
+import * as path from "node:path";
 import { MeltSecret } from "../secrets.js";
 import { CronWorkflow } from "../../imports/cronWorkflows-argoproj.io.js";
 import { KubeSecret } from "../../imports/k8s.js";
@@ -57,9 +58,8 @@ export class MeltArgoWorkflows extends MeltChart {
 
     const argoWorkflows = new Helm(this, "helm", {
       namespace,
-      chart: "argo-workflows",
-      repo: "https://argoproj.github.io/argo-helm",
-      version: "0.41.6",
+      chart: path.join(import.meta.dirname, "../../charts/argo-workflows-0.41.6.tgz"),
+      // see: https://github.com/argoproj/argo-helm/blob/argo-workflows-0.41.6/charts/argo-workflows/values.yaml
       values: {
         images: { pullPolicy: "IfNotPresent" },
         singleNamespace: true,
