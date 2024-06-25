@@ -119,7 +119,7 @@
                 enable = true;
                 package = pkgs.writeShellScriptBin "jest" ''
                   cd ${meltInfraEnv}/melt-infra
-                  ${nodejs_22}/bin/npx jest "$@"
+                  PATH="$PATH:${lib.makeBinPath [ kubernetes-helm ]}" ${nodejs_22}/bin/npx jest "$@"
                 '';
                 entry = "${package}/bin/jest";
                 files = "^melt-infra/.*";
