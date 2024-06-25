@@ -63,6 +63,23 @@
           env.override { ignoreCollisions = true; };
 
         meltDbtUtils = lib.cleanSource dbt-utils;
+
+        meltInfraEnv = pkgs.buildNpmPackage {
+          name = "melt-infra";
+          src = ./melt-infra;
+          nodejs = nodejs_22;
+          npmDepsHash = "sha256-w5rHtfEgWJRAv/lKpqpec6tuwrWeu0qPF7yPKU+dQik=";
+          dontNpmBuild = true;
+          npmFlags = [ "--include=dev" ];
+          propogatedBuildInputs = [ kubernetes-helm ];
+          postInstall = ''
+            # NOTE: utilizing tools like `jest` from a descendant of a `node_modules` directory
+            #       requires additional configuration; moving `melt-infra` out
+            #       from `$out/lib/node_modules` sidesteps this
+            mv $out/lib/node_modules/melt-infra $out
+            rm -r $out/lib/
+          '';
+        };
       in
       {
         devShells = {
@@ -87,6 +104,73 @@
           gitHooks = git-hooks.lib.${system}.run {
             src = ./.;
             hooks = {
+              # TypeScript/JavaScript-related
+              eslintInfra = rec {
+                enable = true;
+                package = pkgs.writeShellScriptBin "eslint" ''
+                  cd ${meltInfraEnv}/melt-infra
+                  ${nodejs_22}/bin/npx eslint "$@"
+                '';
+                entry = "${package}/bin/eslint --fix";
+                files = "^melt-infra/.*\\.[tj]s$";
+                pass_filenames = false;
+              };
+              jestInfra = rec {
+                enable = true;
+                package = pkgs.writeShellScriptBin "jest" ''
+                  cd ${meltInfraEnv}/melt-infra
+                  ${nodejs_22}/bin/npx jest "$@"
+                '';
+                entry = "${package}/bin/jest";
+                files = "^melt-infra/.*";
+                language = "system";
+                pass_filenames = false;
+              };
+              prettierInfra = rec {
+                enable = true;
+                package = pkgs.writeShellScriptBin "prettier" ''
+                  cd ${./.}
+                  ${meltInfraEnv}/melt-infra/node_modules/.bin/prettier \
+                    --ignore-path ./melt-infra/.prettierignore "$@"
+                '';
+                entry = "${package}/bin/prettier --check --ignore-unknown";
+                files = "^melt-infra/.*";
+                language = "system";
+                pass_filenames = true;
+              };
+
+              # SQL-related
+              sqlfmtDbt = rec {
+                enable = true;
+                package = pkgs.writeShellScriptBin "sqlfmt" ''
+                  cd ${./.}
+                  ${meltDbtEnv}/bin/sqlfmt "$@"
+                '';
+                entry = "${package}/bin/sqlfmt";
+                files = "^melt-dbt/.*\\.sql$";
+                language = "system";
+                pass_filenames = true;
+              };
+
+              # Python-related
+              isortInfra = rec {
+                enable = true;
+                package = pkgs.python312Packages.isort;
+                entry = "${package}/bin/isort --profile black";
+                files = "^melt-infra/.*\\.py$";
+                language = "system";
+                pass_filenames = true;
+              };
+              blackInfra = rec {
+                enable = true;
+                package = pkgs.python312Packages.black;
+                entry = "${package}/bin/black";
+                files = "^melt-infra/.*\\.py$";
+                language = "system";
+                pass_filenames = true;
+              };
+
+              # Misc.
               end-of-file-fixer.enable = true;
               nixpkgs-fmt.enable = true;
             };

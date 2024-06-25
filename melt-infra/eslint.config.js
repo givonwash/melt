@@ -14,4 +14,5 @@ export default tseslint.config(
       },
     },
   },
+  { ignores: ["imports/", "node_modules/"] },
 );
