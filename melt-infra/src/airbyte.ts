@@ -1,6 +1,7 @@
 import { ApiObject, Helm } from "cdk8s";
 import { Construct } from "constructs";
 import { MeltChart, MeltChartProps } from "./chart.js";
+import * as path from "node:path";
 
 interface MeltAirbyteChartProps extends MeltChartProps {
   serverUrl: string;
@@ -13,9 +14,7 @@ export class MeltAirbyteChart extends MeltChart {
     const { namespace } = this;
     new Helm(this, `helm`, {
       namespace,
-      chart: "airbyte",
-      repo: "https://airbytehq.github.io/helm-charts",
-      version: "0.86.3",
+      chart: path.join(import.meta.dirname, "../charts/airbyte-0.86.3.tgz"),
       // see: https://github.com/airbytehq/airbyte-platform/blob/e45277b1bd352f52bceb4eaa674d78b9aa09447a/charts/airbyte/values.yaml
       values: {
         global: { airbyteUrl: props.serverUrl },

@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { KubeService } from "../imports/k8s.js";
 import { MeltChart, MeltChartProps } from "./chart.js";
 import { MeltSecret, MeltSecretProps } from "./secrets.js";
+import * as path from "node:path";
 
 export const postgresAdminPasswordSecretKey = "adminPassword";
 export const postgresMeltPasswordKey = "meltPassword";
@@ -42,9 +43,7 @@ export class MeltPostgresChart extends MeltChart {
 
     const postgres = new Helm(this, "helm", {
       namespace,
-      chart: "postgresql",
-      repo: "https://charts.bitnami.com/bitnami",
-      version: "15.4.0",
+      chart: path.join(import.meta.dirname, "../charts/postgresql-15.4.0.tgz"),
       // see: https://github.com/bitnami/charts/blob/postgresql/15.4.0/bitnami/postgresql/values.yaml
       values: {
         auth: {
