@@ -26,7 +26,7 @@ as well as [Nix](https://nix.dev/manual/nix/2.18/) and [Nix Flakes](https://nix.
 
 At its core, `melt` relies upon three different technologies to do the heavy lifting of container orchestration and data extraction: Kubernetes, Argo Workflows, and Airbyte. The latter two technologies "sit" atop the former and are configured/utilized via the logic residing under [`./melt-infra`](./melt-infra).
 
-`melt`'s usage of Argo Workflows revolves around a single workflow, [`elt-workflow`](./melt-infra/src/argo-workflows/index.ts), which handles the configuration of Airbyte, triggering of data synchronization jobs, DBT transformations, and more. `elt-workflow` is created as a [`CronWorkflow`](https://argo-workflows.readthedocs.io/en/stable/cron-workflows/) that runs every other hour. An in-progress run of the `elt-workflow` run, as visualized by Argo Workflow's UI, can be seen below:
+`melt`'s usage of Argo Workflows revolves around a single workflow, [`elt-workflow`](./melt-infra/src/argo-workflows/index.ts), which handles the configuration of Airbyte, triggering of data synchronization jobs, DBT transformations, and more. `elt-workflow` is created as a [`CronWorkflow`](https://argo-workflows.readthedocs.io/en/stable/cron-workflows/) that runs every other hour. An in-progress run of `elt-workflow`, as visualized by Argo Workflow's UI, can be seen below:
 
 ![In-progress `elt-workflow` run as seen from the Argo Workflows UI](./assets/elt-workflow-in-progress.png)
 
