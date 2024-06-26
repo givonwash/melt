@@ -35,7 +35,7 @@ The [DBT project](https://docs.getdbt.com/docs/build/projects) responsible for t
 ## Usage
 
 > [!NOTE]
-> This project was developed for demonstration purposes and has not been thoroughly tested against non-[`minikube`] Kubernetes clusters. **Please proceed with caution &/or expect errors if deploying `melt` outside of this context.**
+> This project was developed for demonstration purposes and has not been thoroughly tested against non-[`minikube`](https://minikube.sigs.k8s.io/docs/) Kubernetes clusters. **Please proceed with caution &/or expect errors if deploying `melt` outside of this context.**
 
 ### With [`nix`](https://nixos.org/)
 
