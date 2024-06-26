@@ -14,15 +14,15 @@ as well as [Nix](https://nix.dev/manual/nix/2.18/) and [Nix Flakes](https://nix.
 
 `melt` was developed with the intention of:
 
-1. making myself (@givonwash) more familiar with a variety of tools/technologies that I had limited prior experience with (e.g., Kubernetes)
-2. demonstrating mastery of tools/technologies that I (@givonwash) do have extensive experience in (e.g., `dbt`, Postgres, Nix, etc.)
+1. making myself ([@givonwash](https://github.com/givonwash)) more familiar with a variety of tools/technologies that I had limited prior experience with (e.g., Kubernetes)
+2. demonstrating mastery of tools/technologies that I ([@givonwash](https://github.com/givonwash)) do have extensive experience in (e.g., `dbt`, Postgres, Nix, etc.)
 
 `melt` is not production-grade software and exists primarily for demonstration purposes!
 
 ## How It Works
 
 > [!NOTE]
-> This project is in a (semi-)working state as of 9ec85f9; however, it is still actively under development and should not be considered "finished"
+> This project is in a (semi-)working state as of [`9ec85f9`](https://github.com/givonwash/melt/tree/9ec85f9ca3b198bcae7198be3b92ce209c35d26d); however, it is still actively under development and should not be considered "finished"
 
 At its core, `melt` relies upon three different technologies to do the heavy lifting of container orchestration and data extraction: Kubernetes, Argo Workflows, and Airbyte. The latter two technologies "sit" atop the former and are configured/utilized via the logic residing under [`./melt-infra`](./melt-infra).
 
