@@ -28,7 +28,7 @@ At its core, `melt` relies upon three different technologies to do the heavy lif
 
 `melt`'s usage of Argo Workflows revolves around a single workflow, [`elt-workflow`](./melt-infra/src/argo-workflows/index.ts), which handles the configuration of Airbyte, triggering of data synchronization jobs, DBT transformations, and more. `elt-workflow` is created as a [`CronWorkflow`](https://argo-workflows.readthedocs.io/en/stable/cron-workflows/) that runs every other hour. An in-progress run of the `elt-workflow` run, as visualized by Argo Workflow's UI, can be seen below:
 
-[!In-progress `elt-workflow` run as seen from the Argo Workflows UI](./assets/elt-workflow-in-progress.png)
+![In-progress `elt-workflow` run as seen from the Argo Workflows UI](./assets/elt-workflow-in-progress.png)
 
 The [DBT project](https://docs.getdbt.com/docs/build/projects) responsible for transforming data extracted and loaded by the `elt-workflow` is found under [`./melt-dbt`](./melt-dbt). `melt-dbt` adheres to [DBT’s enumerated “best practices”](https://docs.getdbt.com/best-practices/how-we-structure/1-guide-overview) of “staging”, “intermediate”, and “mart” transformation layers, with each layer molding data into an increasingly usable shape. A `melt-dbt` Docker image is uploaded to [`givonwash/melt-dbt`](https://hub.docker.com/repository/docker/givonwash/melt-dbt/general) upon pushes to `main` via the [`build/build-melt-dbt` GitHub Actions job](./.github/workflows/build.yaml).
 
