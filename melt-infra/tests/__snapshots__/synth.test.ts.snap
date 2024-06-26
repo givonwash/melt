@@ -6156,6 +6156,60 @@ exports[`Synthesis argoWorkflows 1`] = `
                     "template": "simple-http-get-request",
                   },
                 },
+                {
+                  "arguments": {
+                    "parameters": [
+                      {
+                        "name": "meltDbtImageTag",
+                        "value": "{{inputs.parameters.meltDbtImageTag}}",
+                      },
+                      {
+                        "name": "database",
+                        "value": "{{inputs.parameters.postgresDatabase}}",
+                      },
+                      {
+                        "name": "hostname",
+                        "value": "{{inputs.parameters.postgresHostname}}",
+                      },
+                      {
+                        "name": "port",
+                        "value": "{{inputs.parameters.postgresPort}}",
+                      },
+                      {
+                        "name": "username",
+                        "value": "{{inputs.parameters.postgresUsername}}",
+                      },
+                      {
+                        "name": "passwordSecret",
+                        "value": "{{inputs.parameters.postgresPasswordSecret}}",
+                      },
+                      {
+                        "name": "passwordSecretKey",
+                        "value": "{{inputs.parameters.postgresPasswordSecretKey}}",
+                      },
+                      {
+                        "name": "profileTarget",
+                        "value": "production",
+                      },
+                      {
+                        "name": "threadCount",
+                        "value": "{{inputs.parameters.meltDbtThreadCount}}",
+                      },
+                      {
+                        "name": "fakerSourceSchema",
+                        "value": "{{inputs.parameters.airbyteFakerToPostgresDestinationSchema}}",
+                      },
+                    ],
+                  },
+                  "dependencies": [
+                    "wait-for-load",
+                  ],
+                  "name": "dbt-transform",
+                  "templateRef": {
+                    "name": "melt-argo-build-melt-dbt-marts-c8a07bda",
+                    "template": "melt-dbt-build-marts",
+                  },
+                },
               ],
             },
             "inputs": {
@@ -6223,6 +6277,14 @@ exports[`Synthesis argoWorkflows 1`] = `
                 {
                   "name": "postgresUsername",
                   "value": "melt",
+                },
+                {
+                  "name": "meltDbtImageTag",
+                  "value": "vvfpsj80w0nrspc1hpncdpqwck9898vq",
+                },
+                {
+                  "name": "meltDbtThreadCount",
+                  "value": "2",
                 },
               ],
             },
@@ -6865,6 +6927,105 @@ if __name__ == "__main__":
     main()
 ",
           },
+          "serviceAccountName": "melt-argo-executor-service-account-c853ed23",
+        },
+      ],
+    },
+  },
+  {
+    "apiVersion": "argoproj.io/v1alpha1",
+    "kind": "WorkflowTemplate",
+    "metadata": {
+      "name": "melt-argo-build-melt-dbt-marts-c8a07bda",
+      "namespace": "melt-argo",
+    },
+    "spec": {
+      "templates": [
+        {
+          "container": {
+            "args": [
+              "build",
+              "--select",
+              "+marts",
+            ],
+            "env": [
+              {
+                "name": "DBT_DBNAME",
+                "value": "{{inputs.parameters.database}}",
+              },
+              {
+                "name": "DBT_HOST",
+                "value": "{{inputs.parameters.hostname}}",
+              },
+              {
+                "name": "DBT_PORT",
+                "value": "{{inputs.parameters.port}}",
+              },
+              {
+                "name": "DBT_USER",
+                "value": "{{inputs.parameters.username}}",
+              },
+              {
+                "name": "DBT_PASSWORD",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "key": "{{inputs.parameters.passwordSecretKey}}",
+                    "name": "{{inputs.parameters.passwordSecret}}",
+                  },
+                },
+              },
+              {
+                "name": "DBT_TARGET",
+                "value": "{{inputs.parameters.profileTarget}}",
+              },
+              {
+                "name": "DBT_THREAD_COUNT",
+                "value": "{{inputs.parameters.threadCount}}",
+              },
+              {
+                "name": "DBT_FAKER_SOURCE_SCHEMA",
+                "value": "{{inputs.parameters.fakerSourceSchema}}",
+              },
+            ],
+            "image": "givonwash/melt-dbt:{{inputs.parameters.meltDbtImageTag}}",
+          },
+          "inputs": {
+            "parameters": [
+              {
+                "name": "meltDbtImageTag",
+              },
+              {
+                "name": "database",
+              },
+              {
+                "name": "hostname",
+              },
+              {
+                "name": "port",
+              },
+              {
+                "name": "username",
+              },
+              {
+                "name": "passwordSecret",
+              },
+              {
+                "name": "passwordSecretKey",
+              },
+              {
+                "name": "profileTarget",
+                "value": "production",
+              },
+              {
+                "name": "threadCount",
+                "value": "2",
+              },
+              {
+                "name": "fakerSourceSchema",
+              },
+            ],
+          },
+          "name": "melt-dbt-build-marts",
           "serviceAccountName": "melt-argo-executor-service-account-c853ed23",
         },
       ],

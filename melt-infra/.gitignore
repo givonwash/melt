@@ -1,3 +1,6 @@
+# ignore development variables
+.env
+
 # {j,t}s-related
 *.d.ts
 *.js
