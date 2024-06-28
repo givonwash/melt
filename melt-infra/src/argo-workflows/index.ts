@@ -158,7 +158,7 @@ export class MeltArgoWorkflows extends MeltChart {
                   { name: "postgresPort", value: postgresChart.port.toString() },
                   { name: "postgresUsername", value: postgresChart.meltUser },
 
-                  { name: "meltDbtImageTag", value: "vvfpsj80w0nrspc1hpncdpqwck9898vq" },
+                  { name: "meltDbtImageTag", value: "gdy5vl0ja69jbj3wc52kz2h9spvvsklb" },
                   { name: "meltDbtThreadCount", value: "2" },
                 ],
               },

@@ -6280,7 +6280,7 @@ exports[`Synthesis argoWorkflows 1`] = `
                 },
                 {
                   "name": "meltDbtImageTag",
-                  "value": "vvfpsj80w0nrspc1hpncdpqwck9898vq",
+                  "value": "gdy5vl0ja69jbj3wc52kz2h9spvvsklb",
                 },
                 {
                   "name": "meltDbtThreadCount",
