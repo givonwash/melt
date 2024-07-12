@@ -1,8 +1,19 @@
+/**
+ * Functionality for generating Kubernetes manifests that provide Argo Workflows`TemplateWorkflow`s
+ * that check if a given Postgres database is "ready" (i.e., `pg_isready` exits with a zero status
+ * code)
+ */
+
 import { IntOrString } from "../../../imports/k8s.js";
 import { Construct } from "constructs";
 import { MeltWorkflowTemplate, MeltWorkflowTemplateProps } from "./index.js";
 import { WorkflowTemplate } from "../../../imports/workflowTemplates-argoproj.io.js";
 
+/**
+ * `WorkflowTemplate` that checks if a given Postgres database is "ready"
+ *
+ * i.e., does `pg_isready` exit with a status code of zero?
+ */
 export class MeltCheckPostgresIsReady extends MeltWorkflowTemplate {
   static readonly templateName = "check-postgres-is-ready";
 

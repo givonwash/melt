@@ -1,3 +1,8 @@
+/**
+ * Functionality for generating Kubernetes manifests that provide Argo Workflows `TemplateWorkflow`s
+ * that invoke the `check-http-get-json-or-http-post-json.py` script found at
+ * src/argo-workflows/templates/scripts/check-http-get-json-or-http-post-json.py in various ways
+ */
 import { Construct } from "constructs";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -53,6 +58,10 @@ const baseEnvironment: EnvVar[] = [
   },
 ];
 
+/**
+ * `WorkflowTemplate` that invokes the `check-http-get-json-or-http-post-json.py` script located
+ * at src/argo-workflows/templates/scripts/check-http-get-json-or-http-post-json.py
+ */
 export class MeltCheckHttpGetJsonOrHttpPostJson extends MeltWorkflowTemplate {
   static readonly templateName = "check-http-get-json-or-http-post-json";
 
@@ -84,6 +93,11 @@ export class MeltCheckHttpGetJsonOrHttpPostJson extends MeltWorkflowTemplate {
   }
 }
 
+/**
+ * `WorkflowTemplate` that invokes the `check-http-get-json-or-http-post-json.py` script located
+ * at src/argo-workflows/templates/scripts/check-http-get-json-or-http-post-json.py _with a value
+ * from a `Secret` passed to the `--patch-value-for-payload-to-post` option
+ */
 export class MeltCheckHttpGetJsonOrHttpPostJsonWithPatchedSecrets extends MeltWorkflowTemplate {
   static readonly templateName = "check-http-get-json-or-http-post-json-with-patched-secrets";
 

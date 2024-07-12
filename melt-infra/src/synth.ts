@@ -1,3 +1,8 @@
+/**
+ * Entrypoints and tooling for generating Airbyte, Postgres, and Argo Workflows Kubernetes manifests
+ * for "end-user" usage of `melt-infra`
+ */
+
 import { App } from "cdk8s";
 import yargs from "yargs";
 
@@ -7,25 +12,64 @@ import { MeltNamespaceChart } from "./namespace.js";
 import * as postgres from "./postgres.js";
 import { MeltPostgresChart } from "./postgres.js";
 
+/**
+ * Argument parser for variables needed to synthesize `melt-infra` Kubernetes manifests
+ */
 function parseSynthArgs(args: string | readonly string[]) {
   return yargs(args)
     .env("MELT_SYNTH")
     .options({
-      airbyteNamespace: { type: "string", demandOption: true },
-      airbyteServerUrl: { type: "string", demandOption: true },
+      airbyteNamespace: {
+        type: "string",
+        demandOption: true,
+        describe: "The name of the namespace to store Airbyte resources in",
+      },
+      airbyteServerUrl: {
+        type: "string",
+        demandOption: true,
+        describe: "The URL at which Airbyte's server should be accessible",
+      },
 
-      argoNamespace: { type: "string", demandOption: true },
+      argoNamespace: {
+        type: "string",
+        demandOption: true,
+        describe: "The name of the namespace to store Argo Workflows resources in",
+      },
 
-      postgresNamespace: { type: "string", demandOption: true },
-      postgresDatabase: { type: "string", demandOption: true },
-      postgresAdminPassword: { type: "string", demandOption: true },
-      postgresMeltUser: { type: "string", demandOption: true },
-      postgresMeltPassword: { type: "string", demandOption: true },
+      postgresNamespace: {
+        type: "string",
+        demandOption: true,
+        describe: "The name of the namespace to store Postgres resources in",
+      },
+      postgresDatabase: {
+        type: "string",
+        demandOption: true,
+        describe: "The name of the database to create when initializing Postgres",
+      },
+      postgresAdminPassword: {
+        type: "string",
+        demandOption: true,
+        describe: "The value of the admin user's password in the initialized Postgres database",
+      },
+      postgresMeltUser: {
+        type: "string",
+        demandOption: true,
+        describe: 'The name of the "regular" user to create when initializing Postgres',
+      },
+      postgresMeltPassword: {
+        type: "string",
+        demandOption: true,
+        describe:
+          'The value of the "regular" user\'s password in the initialized Postgres database',
+      },
     })
     .help()
     .parseSync();
 }
 
+/**
+ * `melt-infra`'s entrypoint. Generate all needed Kubernetes manifests to make use of `melt`
+ */
 function main() {
   const app = new App();
 

@@ -1,3 +1,7 @@
+/**
+ * Functionality for generating Kubernetes manifests that "stand up" Argo Workflows *and* make use
+ * of it to orchestrate and end-to-end extract-load-transform (ELT) pipeline
+ */
 import { ApiObject, Helm } from "cdk8s";
 import { ApiResource, Role, ServiceAccount } from "cdk8s-plus-29";
 import { Construct } from "constructs";
@@ -21,11 +25,19 @@ import {
 } from "./templates/check-http-get-json-or-http-post-json.js";
 import { MeltDbtBuildMarts } from "./templates/melt-dbt-build-marts.js";
 
+// NOTE: `airbyteChart` and `postgresChart` are added as required properties to `MeltChartProps`
+//       below to ensure that `MeltArgoWorkflows` (see below) has access to details to a Postgres
+//       database and Airbyte (conglemeration of) services needed to orchestrate and end-to-end
+//       ELT pipeline
 interface MeltArgoChartProps extends MeltChartProps {
   airbyteChart: MeltAirbyteChart;
   postgresChart: MeltPostgresChart;
 }
 
+/**
+ * `Chart` to generate Kubernetes manifests needed to "stand up" Argo Workflows and orchestrate
+ * `melt`'s claimed "end-to-end ELT pipeline"
+ */
 export class MeltArgoWorkflows extends MeltChart {
   constructor(scope: Construct, id: string, props: MeltArgoChartProps) {
     super(scope, id, props);
@@ -34,6 +46,8 @@ export class MeltArgoWorkflows extends MeltChart {
     const { airbyteChart, postgresChart } = props;
 
     this.addDependency(airbyteChart, postgresChart);
+
+    // TODO: extract out `ServiceAccount` and `ServiceAccount` token creation into its own reusable logic
 
     const workflowExecutorServiceAccount = new ServiceAccount(this, "executor-service-account", {
       metadata: { namespace },
@@ -74,7 +88,11 @@ export class MeltArgoWorkflows extends MeltChart {
 
     argoWorkflows.node.addDependency(workflowExecutorServiceAccount);
 
+    // NOTE: see src/postgres.ts for where this `Secret` is defined
     const postgresChartMeltSecret = postgresChart.node.findChild("secret") as MeltSecret;
+    // NOTE: because there is no guarantee that `postgresChart` and `this` make use of the same
+    //       `Namespace`, the `Secret` from `postgresChart` needs to be copied over to `this`'s
+    //       `Namespace`
     const postgresSecret = new MeltSecret(this, "postgres-secret", {
       namespace,
       name: postgresChartMeltSecret.name,
@@ -122,6 +140,7 @@ export class MeltArgoWorkflows extends MeltChart {
       serviceAccountName: workflowExecutorServiceAccount.name,
     });
 
+    // the `CronWorkflow` that encapsulates the claimed "end-to-end" ELT logic
     const eltWorkflow = new CronWorkflow(this, "elt-workflow", {
       metadata: { namespace },
       spec: {
@@ -590,6 +609,9 @@ export class MeltArgoWorkflows extends MeltChart {
       },
     });
 
+    // TODO: make this an actual "reader" role
+    //
+    // NOTE: the role intended for users of Argo Workflows browser-based UI
     const readerRole = new Role(this, "reader-role", {
       metadata: { namespace },
       rules: [

@@ -1,3 +1,6 @@
+/**
+ * Functionality for creating Kubernetes `Secret`s
+ */
 import { Construct } from "constructs";
 import { KubeSecret } from "../imports/k8s.js";
 

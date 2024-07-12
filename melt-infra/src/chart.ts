@@ -1,3 +1,6 @@
+/**
+ * Functionality for creating `cdk8s` `Chart`s
+ */
 import { ApiObject, Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 import { MeltNamespaceChart } from "./namespace.js";
@@ -9,6 +12,11 @@ export interface MeltChartProps extends ChartProps {
   readonly namespaceChart: MeltNamespaceChart;
 }
 
+/**
+ * Base `Chart` class upon which (most) `melt` `Chart`s should be extended
+ *
+ * `MeltChart` requires a `Namespace` to exist ahead of time and provides some QoL tooling
+ */
 export class MeltChart extends Chart {
   readonly namespace: string;
 
@@ -21,6 +29,11 @@ export class MeltChart extends Chart {
     this.namespace = namespaceChart.name;
   }
 
+  /**
+   * Get an `ApiObject` of interest from the `Chart`s `Construct` tree
+   *
+   * @param predicate The "predicate" used to find the `ApiObject` of interest
+   */
   getApiObject(predicate: (o: ApiObject) => boolean): ApiObject {
     const found = this.node
       .findAll()
