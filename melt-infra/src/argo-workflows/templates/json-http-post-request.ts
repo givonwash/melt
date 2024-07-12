@@ -1,7 +1,15 @@
+/**
+ * Functionality for generating Kubernetes manifests that provide Argo Workflows`TemplateWorkflow`s
+ * that submit POST HTTP requests with JSON payloads
+ */
+
 import { Construct } from "constructs";
 import { MeltWorkflowTemplate, MeltWorkflowTemplateProps } from "./index.js";
 import { WorkflowTemplate } from "../../../imports/workflowTemplates-argoproj.io.js";
 
+/**
+ * `WorkflowTemplate` that submits a POST HTTP request with a JSON body
+ */
 export class MeltJsonHttpPostRequest extends MeltWorkflowTemplate {
   static readonly templateName = "json-http-post-request";
 

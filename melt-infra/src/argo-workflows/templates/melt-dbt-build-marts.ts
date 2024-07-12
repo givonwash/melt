@@ -1,7 +1,16 @@
+/**
+ * Functionality for generating Kubernetes manifests that provide Argo Workflows`TemplateWorkflow`s
+ * that execute `dbt build --select +marts` from within the `melt-dbt` DBT project
+ */
 import { Construct } from "constructs";
 import { MeltWorkflowTemplate, MeltWorkflowTemplateProps } from "./index.js";
 import { WorkflowTemplate } from "../../../imports/workflowTemplates-argoproj.io.js";
 
+/**
+ * `WorkflowTemplate` that builds all "marts" [1] in the `melt-dbt` DBT project
+ *
+ * [1]: https://docs.getdbt.com/best-practices/how-we-structure/4-marts
+ */
 export class MeltDbtBuildMarts extends MeltWorkflowTemplate {
   static readonly templateName = "melt-dbt-build-marts";
 

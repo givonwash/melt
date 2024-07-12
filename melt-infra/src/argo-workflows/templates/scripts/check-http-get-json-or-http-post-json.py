@@ -1,5 +1,12 @@
 #!/usr/bin/env python3.12
 
+"""
+Script that does the following:
+
+1. submits a `GET` HTTP request to a user-specified URL
+2. checks the response's value for a particular condition
+3. submits a `POST` HTTP request to a user-specified URL given the condition in (2) was satisfied
+"""
 
 import json
 import os
@@ -14,6 +21,11 @@ Json = dict[str, "Json"] | list["Json"] | bool | int | float | str | None
 
 
 class ArgumentParserWithEnvVarDefault(ArgumentParser):
+    """
+    `ArgumentParser` that allows environment variables to be used in place of required command-line
+    options
+    """
+
     def add_argument(
         self, *names_or_flags: str, envvar: Optional[str] = None, **kwargs: Any
     ) -> Action:
@@ -25,6 +37,9 @@ class ArgumentParserWithEnvVarDefault(ArgumentParser):
 
 
 def try_loads(s: str) -> Json:
+    """
+    Attempt to invoke `json.loads`. If the invocation fails return `s` as-is
+    """
     try:
         return json.loads(s)
     except JSONDecodeError:
@@ -32,6 +47,9 @@ def try_loads(s: str) -> Json:
 
 
 def parse_args(args: list[str]) -> Namespace:
+    """
+    Parse command-line arguments for this script's main entrypoint (`main`)
+    """
     parser = ArgumentParserWithEnvVarDefault()
     parser.add_argument(
         "--url-to-get",
@@ -77,6 +95,7 @@ def parse_args(args: list[str]) -> Namespace:
         "--patch-path-for-payload-to-post",
         envvar="PATCH_PATH_FOR_PAYLOAD_TO_POST",
         type=json.loads,
+        # TODO: correct below to say PATCH_VALUE_FOR_PAYLOAD_TO_POST
         help="Path to place PATCH_PATH_FOR_PAYLOAD_TO_POST at in PAYLOAD_TO_POST",
     )
     parser.add_argument(
@@ -97,6 +116,9 @@ def parse_args(args: list[str]) -> Namespace:
 
 
 def get(url: str) -> Json:
+    """
+    Submit a `GET` HTTP request and parse the response
+    """
     with request.urlopen(
         Request(
             url=url,
@@ -107,6 +129,9 @@ def get(url: str) -> Json:
 
 
 def post(url: str, data: bytes) -> Json:
+    """
+    Submit a `POST` HTTP request and parse the response
+    """
     with request.urlopen(
         Request(
             method="POST",
@@ -122,18 +147,38 @@ def post(url: str, data: bytes) -> Json:
 
 
 class DigFilterByKeySpec(TypedDict):
+    """
+    Special dictionary that can be passed as the value to `filterByKey` in `DigFilterByKey`
+    """
+
     key: str
     value: Json
 
 
 class DigFilterByKey(TypedDict):
+    """
+    Special dictionary that can be passed as an element in a list passed to `path` in `dig`
+    """
+
     filterByKey: DigFilterByKeySpec
 
 
-class DigError(Exception): ...
+class DigError(Exception):
+    """
+    Error raised due to issues encountered in the usage of `dig`
+    """
+
+    ...
 
 
 def dig(j: Json, path: list[str | DigFilterByKey]) -> Json:
+    """
+    "Dig" for a value within a JSON data structure located at the "path" specified by `path`
+
+    `path` is a sequence of either:
+    1. keys or indexes into an object or array
+    2. a `DigFilterByKey` dictionary to filter out elements from an array
+    """
     match (j, path):
         case (dict(), [p, *ps]):
             match p:
@@ -163,6 +208,12 @@ def dig(j: Json, path: list[str | DigFilterByKey]) -> Json:
 
 
 def patch(j: Json, value: Json, path: list[str]) -> Json:
+    """
+    "Patch" a value in a JSON data structure at `path` with `value`
+
+    See the docstring for `dig` for details on how `path` works (sans the usage of
+    `DigFilterByKey`)
+    """
     match (j, value, path):
         # case: `j` is a `dict` and `path` is non-empty
         case (dict(), _, [p, *ps]):

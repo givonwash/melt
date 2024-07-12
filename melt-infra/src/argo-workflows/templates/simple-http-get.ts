@@ -1,8 +1,16 @@
+/**
+ * Functionality for generating Kubernetes manifests that provide Argo Workflows`TemplateWorkflow`s
+ * that submit simple HTTP GET requests
+ */
+
 import { IntOrString } from "../../../imports/k8s.js";
 import { Construct } from "constructs";
 import { MeltWorkflowTemplate, MeltWorkflowTemplateProps } from "./index.js";
 import { WorkflowTemplate } from "../../../imports/workflowTemplates-argoproj.io.js";
 
+/**
+ * `WorkflowTemplate` that submits a simple HTTP GET request to a user-specified URL
+ */
 export class MeltSimpleHttpGetRequest extends MeltWorkflowTemplate {
   static readonly templateName = "simple-http-get-request";
 

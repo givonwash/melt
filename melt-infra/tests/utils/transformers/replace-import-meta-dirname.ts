@@ -1,3 +1,11 @@
+/**
+ * `ts-jest`-compatible Typescript AST transformer [1] to replace occurrences of
+ * `import.meta.dirname` with `__dirname` due to issues with using non-CommonJS
+ * constructs within Jest's "runtime" regardless of configuration options [2]
+ *
+ * [1]: https://kulshekhar.github.io/ts-jest/docs/getting-started/options/astTransformers/
+ * [2]: https://github.com/kulshekhar/ts-jest/issues/3888
+ */
 import ts, {
   SourceFile,
   TransformationContext,
