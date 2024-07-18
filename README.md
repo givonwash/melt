@@ -52,7 +52,19 @@ minikube start
 cd melt-infra
 
 # Generate ("synthesize") K8s manifests
-npx tsx src/synth.ts
+#
+# NOTE:
+#   1. Alternatively these options can be defined as environment variables instead to protect secret
+#      credentials
+#   2. To see descriptions for these options, execute `npx tsx src/synth.ts --help`
+npx tsx src/synth.ts --airbyte-namespace '<airbyte-namespace>' \
+                     --airbyte-server-url '<airbyte-server-url>' \
+                     --argo-namespace '<argo-namespace>' \
+                     --postgres-namespace '<postgres-namespace>' \
+                     --postgres-database '<postgres-database>' \
+                     --postgres-admin-password '<postgres-admin-password>' \
+                     --postgres-melt-user '<postgres-melt-user>' \
+                     --postgres-melt-password '<postgres-melt-password>'
 
 # Apply generated K8s manifests
 #
@@ -89,7 +101,19 @@ cd melt-infra
 npm install
 
 # Generate ("synthesize") K8s manifests
-npx tsx src/synth.ts
+#
+# NOTE:
+#   1. Alternatively these options can be defined as environment variables instead to protect secret
+#      credentials
+#   2. To see descriptions for these options, execute `npx tsx src/synth.ts --help`
+npx tsx src/synth.ts --airbyte-namespace '<airbyte-namespace>' \
+                     --airbyte-server-url '<airbyte-server-url>' \
+                     --argo-namespace '<argo-namespace>' \
+                     --postgres-namespace '<postgres-namespace>' \
+                     --postgres-database '<postgres-database>' \
+                     --postgres-admin-password '<postgres-admin-password>' \
+                     --postgres-melt-user '<postgres-melt-user>' \
+                     --postgres-melt-password '<postgres-melt-password>'
 
 # Apply generated K8s manifests
 #
