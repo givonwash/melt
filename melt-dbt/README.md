@@ -64,6 +64,7 @@ is provided below:
 > (staging models) and molecules (intermediate models) into full-fledged cells that have identity
 > and purpose. We sometimes like to call this the _entity layer_ or _concept layer_, to emphasize
 > that all our marts are meant to represent a specific entity or concept at its unique grain
+>
 > — _How we structure our dbt projects_, _Marts: Business-defined entities_, DBT Documentation [^1]
 
 **Marts** are models that allow data consumers to answer business specific questions without having
@@ -101,6 +102,7 @@ performs (e.g., `int_crunchbase_companies_joined_with_product_companies.sql`)
 
 > Sources make it possible to name and describe the data loaded into your warehouse by your Extract
 > and Load tools.
+>
 > — _Add sources to your DAG_, _Using sources_, DBT Documentation [^2]
 
 **Sources** are the _raw_ data loaded by external (potentially third-party) tooling into
@@ -155,6 +157,7 @@ with source as (
 
 > The staging layer is \[...\] the foundation of our project, where we bring all the individual
 > components we're going to use to build our more complex and useful models into the project.
+>
 > — _How we structure our dbt projects_, _Staging: Preparing our atomic building blocks_, DBT Documentation [^3]
 
 **Staging** models are the building blocks of all (non-source) models in a DBT project. These models
