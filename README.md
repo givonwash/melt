@@ -52,7 +52,19 @@ minikube start
 cd melt-infra
 
 # Generate ("synthesize") K8s manifests
-npx tsx src/synth.ts
+#
+# NOTE:
+#   1. Alternatively these options can be defined as environment variables instead to protect secret
+#      credentials
+#   2. To see descriptions for these options, execute `npx tsx src/synth.ts --help`
+npx tsx src/synth.ts --airbyte-namespace '<airbyte-namespace>' \
+                     --airbyte-server-url '<airbyte-server-url>' \
+                     --argo-namespace '<argo-namespace>' \
+                     --postgres-namespace '<postgres-namespace>' \
+                     --postgres-database '<postgres-database>' \
+                     --postgres-admin-password '<postgres-admin-password>' \
+                     --postgres-melt-user '<postgres-melt-user>' \
+                     --postgres-melt-password '<postgres-melt-password>'
 
 # Apply generated K8s manifests
 #
@@ -67,11 +79,11 @@ minikube dashboard
 # Optional: Monitor the `elt-workflow` by visiting http://localhost:2746 and pasting your access
 #           token (printed to `stdout` by the second command below) into the relevant text box
 #
-#           Be sure to swap `${ARGO_WORKFLOWS_SERVER_SERVICE_NAME}` with your actual service name
-#           and `${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET}` with your actual service account
-#           secret!
-kubectl port-forward --namespace melt-argo service/${ARGO_WORKFLOWS_SERVER_SERVICE_NAME} 2746:2746
-echo "Bearer $(kubectl get --namespace=melt-argo secret ${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET} -o=jsonpath='{.data.token}' | base64 --decode)"
+#           Be sure to swap `${ARGO_WORKFLOWS_SERVER_SERVICE_NAME}` with your actual service name,
+#           `${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET}` with your actual service account
+#           secret, and `<argo-namespace>` with the value passed to `--argo-namespace` above
+kubectl port-forward --namespace='<argo-namespace>' service/${ARGO_WORKFLOWS_SERVER_SERVICE_NAME} 2746:2746
+echo "Bearer $(kubectl get --namespace='<argo-namespace>' secret ${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET} -o=jsonpath='{.data.token}' | base64 --decode)"
 ```
 
 ### Without [`nix`](https://nixos.org/)
@@ -89,7 +101,19 @@ cd melt-infra
 npm install
 
 # Generate ("synthesize") K8s manifests
-npx tsx src/synth.ts
+#
+# NOTE:
+#   1. Alternatively these options can be defined as environment variables instead to protect secret
+#      credentials
+#   2. To see descriptions for these options, execute `npx tsx src/synth.ts --help`
+npx tsx src/synth.ts --airbyte-namespace '<airbyte-namespace>' \
+                     --airbyte-server-url '<airbyte-server-url>' \
+                     --argo-namespace '<argo-namespace>' \
+                     --postgres-namespace '<postgres-namespace>' \
+                     --postgres-database '<postgres-database>' \
+                     --postgres-admin-password '<postgres-admin-password>' \
+                     --postgres-melt-user '<postgres-melt-user>' \
+                     --postgres-melt-password '<postgres-melt-password>'
 
 # Apply generated K8s manifests
 #
@@ -106,9 +130,9 @@ minikube dashboard
 #
 #           NOTE: You'll need the `base64` utility program as well for the second command to work.
 #
-#           Be sure to swap `${ARGO_WORKFLOWS_SERVER_SERVICE_NAME}` with your actual service name
-#           and `${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET}` with your actual service account
-#           secret!
-kubectl port-forward --namespace melt-argo service/${ARGO_WORKFLOWS_SERVER_SERVICE_NAME} 2746:2746
-echo "Bearer $(kubectl get --namespace=melt-argo secret ${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET} -o=jsonpath='{.data.token}' | base64 --decode)"
+#           Be sure to swap `${ARGO_WORKFLOWS_SERVER_SERVICE_NAME}` with your actual service name,
+#           `${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET}` with your actual service account
+#           secret, and `<argo-namespace>` with the value passed to `--argo-namespace` above
+kubectl port-forward --namespace='<argo-namespace>' service/${ARGO_WORKFLOWS_SERVER_SERVICE_NAME} 2746:2746
+echo "Bearer $(kubectl get --namespace='<argo-namespace>' secret ${ARGO_WORKFLOWS_READER_SERVICE_ACCOUNT_SECRET} -o=jsonpath='{.data.token}' | base64 --decode)"
 ```
